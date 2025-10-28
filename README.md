@@ -65,7 +65,7 @@ python world_economics.py --seed world_seed.json --years 40 --randseed 42
 
 **Note**: The input JSON format is currently under development and subject to change. We welcome suggestions and feedback on how to improve the seed file structure to make it more intuitive, flexible, and suitable for various use cases. If you have ideas for additional parameters, better organization, or new features, please open an issue or submit a pull request.
 
-The seed file must be a JSON file with the following structure:
+The seed file now is a JSON file with the following structure:
 
 ```json
 {
