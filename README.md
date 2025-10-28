@@ -83,11 +83,6 @@ The seed file must be a JSON file with the following structure:
       "tax_rate": 0.25,
       "gov_spend_share": 0.22,
       "stability": 0.85,
-      "commodity_endowment": {
-        "oil": 0.0,
-        "metal": 0.2,
-        "agri": 0.1
-      }
     }
   ],
   "distances": {
@@ -113,10 +108,6 @@ The seed file must be a JSON file with the following structure:
 - `tax_rate`: Tax revenue as share of GDP (e.g., 0.25 = 25%)
 - `gov_spend_share`: Government spending as share of GDP (e.g., 0.22 = 22%)
 - `stability`: Political/economic stability index from 0.0 to 1.0
-- `commodity_endowment`: Dictionary of commodity advantages/disadvantages
-  - `oil`: Oil endowment (negative = importer, positive = exporter)
-  - `metal`: Metal/mineral endowment
-  - `agri`: Agricultural endowment
 
 ### Distance Data
 
