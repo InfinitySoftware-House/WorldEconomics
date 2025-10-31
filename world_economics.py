@@ -7,7 +7,7 @@ import random
 import csv
 import os
 from dataclasses import dataclass
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 import matplotlib
 matplotlib.use("Agg")
 
@@ -31,7 +31,10 @@ MIN_GROWTH = -0.05
 # Trade
 GRAVITY_K = 3e-7
 TRADE_ELASTICITY = 0.25
-DISTANCE_DECAY = 1.0
+RELATIONSHIP_DECAY = 1.0
+RELATIONSHIP_BASE_RESISTANCE = 2000.0
+MIN_RELATIONSHIP_SCORE = 0.05
+MAX_RELATIONSHIP_SCORE = 0.95
 
 # Policy
 ELECTION_CYCLE_YEARS = 4
@@ -51,19 +54,64 @@ DEFICIT_FLOOR = -0.06
 def clamp(x, lo, hi): return max(lo, min(hi, x))
 
 
-def dist_region(a: str, b: str) -> float:
+def region_affinity(a: str, b: str) -> float:
     if a == b:
-        return 1000.0
+        return 0.32
     pairs = {
-        ("Europe", "Americas"): 7000, ("Europe", "Asia"): 6000, ("Europe", "Africa"): 3000, ("Europe", "Oceania"): 16000,
-        ("Americas", "Asia"): 10000, ("Americas", "Africa"): 8000, ("Americas", "Oceania"): 12000,
-        ("Asia", "Africa"): 6000, ("Asia", "Oceania"): 7000, ("Africa", "Oceania"): 11000
+        ("Europe", "Americas"): 0.22, ("Europe", "Asia"): 0.18, ("Europe", "Africa"): 0.24, ("Europe", "Oceania"): 0.12,
+        ("Americas", "Asia"): 0.16, ("Americas", "Africa"): 0.15, ("Americas", "Oceania"): 0.17,
+        ("Asia", "Africa"): 0.14, ("Asia", "Oceania"): 0.26, ("Africa", "Oceania"): 0.13,
     }
-    return pairs.get((a, b), pairs.get((b, a), 9000))
+    return pairs.get((a, b), pairs.get((b, a), 0.1))
+
+
+def baseline_relationship(a: "Country", b: "Country") -> float:
+    score = 0.08
+    score += region_affinity(a.region, b.region)
+    if a.is_democracy == b.is_democracy:
+        score += 0.12
+    ideology_gap = abs(a.party_leaning - b.party_leaning)
+    score += max(0.0, 0.18 - 0.22 * ideology_gap)
+    stability_avg = 0.5 * (a.stability + b.stability)
+    score += 0.15 * stability_avg
+    gdp_pc_a = a.gdp / max(1.0, a.population)
+    gdp_pc_b = b.gdp / max(1.0, b.population)
+    income_gap = abs(gdp_pc_a - gdp_pc_b)
+    score += max(0.0, 0.1 - income_gap / 80000.0)
+    return clamp(score, MIN_RELATIONSHIP_SCORE, MAX_RELATIONSHIP_SCORE)
+
+
+def relationship_from_entry(entry: Any) -> float:
+    if isinstance(entry, dict):
+        weights = {
+            "trade_alignment": 0.4,
+            "financial_links": 0.2,
+            "security_partnership": 0.2,
+            "ideology_overlap": 0.1,
+            "supply_chain_overlap": 0.1,
+        }
+        score = 0.0
+        total_weight = 0.0
+        for key, weight in weights.items():
+            if key in entry:
+                score += weight * float(entry[key])
+                total_weight += weight
+        for key, value in entry.items():
+            if key not in weights:
+                score += float(value)
+                total_weight += 1.0
+        if total_weight == 0.0:
+            value = float(entry.get("strength", 0.3))
+        else:
+            value = score / total_weight
+    else:
+        value = float(entry)
+    return clamp(value, MIN_RELATIONSHIP_SCORE, MAX_RELATIONSHIP_SCORE)
 
 
 @dataclass
 class Country:
+    code: str
     name: str
     region: str
     is_democracy: bool
@@ -97,23 +145,26 @@ class Country:
 
 
 class World:
-    def __init__(self, countries: List[Country], distances: Dict[Tuple[str, str], float], rnd: random.Random):
-        self.c = {x.name: x for x in countries}
-        self.distances = distances
+    def __init__(self, countries: List[Country], relationships: Dict[Tuple[str, str], float], rnd: random.Random):
+        self.c = {x.code: x for x in countries}
+        self.relationships = relationships
         self.rnd = rnd
         # Global cycles
         self.g_cycle = 0.0
         self.comm_cycle = 0.0
         self.fin_cycle = 0.0
 
-    def distance(self, a: Country, b: Country) -> float:
-        key = (a.name, b.name)
-        if key in self.distances:
-            return self.distances[key]
-        key = (b.name, a.name)
-        if key in self.distances:
-            return self.distances[key]
-        return dist_region(a.region, b.region)
+    def relationship_strength(self, a: Country, b: Country) -> float:
+        key = (a.code, b.code)
+        if key in self.relationships:
+            return self.relationships[key]
+        key = (b.code, a.code)
+        if key in self.relationships:
+            return self.relationships[key]
+        return baseline_relationship(a, b)
+
+    def relationship_resistance(self, score: float) -> float:
+        return RELATIONSHIP_BASE_RESISTANCE / max(score, MIN_RELATIONSHIP_SCORE)
 
     def step(self, year: int):
         # Update global cycles (AR(1))
@@ -170,31 +221,32 @@ class World:
 
     # -------- Trade & CA --------
     def _trade_and_balance_CA(self):
-        names = list(self.c.keys())
-        exports = {n: 0.0 for n in names}
-        imports = {n: 0.0 for n in names}
-        for i in range(len(names)):
-            for j in range(len(names)):
+        codes = list(self.c.keys())
+        exports = {code: 0.0 for code in codes}
+        imports = {code: 0.0 for code in codes}
+        for i in range(len(codes)):
+            for j in range(len(codes)):
                 if i == j:
                     continue
-                a, b = self.c[names[i]], self.c[names[j]]
-                dist = self.distance(a, b)
-                base = GRAVITY_K * (a.gdp * b.gdp) / (dist ** DISTANCE_DECAY)
+                a, b = self.c[codes[i]], self.c[codes[j]]
+                score = self.relationship_strength(a, b)
+                resistance = self.relationship_resistance(score)
+                base = GRAVITY_K * (a.gdp * b.gdp) / (resistance ** RELATIONSHIP_DECAY)
                 flow = base
-                exports[a.name] += flow
-                imports[b.name] += flow
+                exports[a.code] += flow
+                imports[b.code] += flow
 
         # raw CA
         total_CA = 0.0
-        for n in names:
-            self.c[n].ca = exports[n] - imports[n]
-            total_CA += self.c[n].ca
+        for code in codes:
+            self.c[code].ca = exports[code] - imports[code]
+            total_CA += self.c[code].ca
 
         # Balance to ~0 by scaling surpluses/deficits
         if abs(total_CA) > 1e-6:
-            adjust = total_CA / len(names)
-            for n in names:
-                self.c[n].ca -= adjust  # simple uniform offset to make sum ~ 0
+            adjust = total_CA / len(codes)
+            for code in codes:
+                self.c[code].ca -= adjust  # simple uniform offset to make sum ~ 0
 
     # -------- Macro --------
     def _macro(self, c: Country):
@@ -286,12 +338,89 @@ class World:
 def load_seed(path: str):
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
-    countries = [Country(**row) for row in data["countries"]]
-    distances = {}
-    for k, v in data.get("distances", {}).items():
-        a, b = k.split("|")
-        distances[(a, b)] = float(v)
-    return countries, distances
+    countries: List[Country] = []
+    for row in data["countries"]:
+        row = dict(row)
+        code = row.get("code")
+        if code:
+            code = str(code).upper()
+        else:
+            code = "".join(ch for ch in row["name"] if ch.isalpha())[:3].upper()
+        row["code"] = code
+        countries.append(Country(**row))
+
+    code_by_name = {c.name: c.code for c in countries}
+    known_codes = {c.code for c in countries}
+
+    def to_code(label: str) -> str:
+        label = str(label).strip()
+        upper = label.upper()
+        if upper in known_codes:
+            return upper
+        return code_by_name.get(label, "".join(ch for ch in label if ch.isalpha())[:3].upper())
+
+    relationships: Dict[Tuple[str, str], float] = {}
+    raw_relationships = data.get("relationships")
+
+    if isinstance(raw_relationships, list):
+        ignore_keys = {"codes", "countries", "from", "to", "source", "target", "a", "b"}
+        for entry in raw_relationships:
+            if not isinstance(entry, dict):
+                continue
+            codes = None
+            if "codes" in entry and isinstance(entry["codes"], list) and len(entry["codes"]) == 2:
+                codes = entry["codes"]
+            elif "countries" in entry and isinstance(entry["countries"], list) and len(entry["countries"]) == 2:
+                codes = entry["countries"]
+            else:
+                candidates = [
+                    (entry.get("from"), entry.get("to")),
+                    (entry.get("source"), entry.get("target")),
+                    (entry.get("a"), entry.get("b")),
+                ]
+                for a_code, b_code in candidates:
+                    if a_code and b_code:
+                        codes = [a_code, b_code]
+                        break
+            if not codes or len(codes) != 2:
+                continue
+            code_a, code_b = (to_code(codes[0]), to_code(codes[1]))
+            metrics = {k: v for k, v in entry.items() if k not in ignore_keys}
+            value = metrics if metrics else entry.get("strength", 0.3)
+            relationships[(code_a, code_b)] = relationship_from_entry(value)
+
+    elif isinstance(raw_relationships, dict):
+        for key, value in raw_relationships.items():
+            if isinstance(key, str) and "|" in key:
+                left, right = key.split("|", 1)
+                relationships[(to_code(left), to_code(right))] = relationship_from_entry(value)
+                continue
+            code_a = to_code(key)
+            if isinstance(value, dict):
+                nested_items = list(value.items())
+                has_nested = any(isinstance(v, dict) for _, v in nested_items)
+                if has_nested:
+                    for sub_key, sub_val in nested_items:
+                        relationships[(code_a, to_code(sub_key))] = relationship_from_entry(sub_val)
+                else:
+                    partner = value.get("code") or value.get("partner") or value.get("to")
+                    metrics = {k: v for k, v in value.items() if k not in {"code", "partner", "to"}}
+                    if partner:
+                        relationships[(code_a, to_code(partner))] = relationship_from_entry(metrics if metrics else value.get("strength", 0.3))
+            else:
+                # treat scalar as pre-computed strength relative to all?
+                continue
+
+    if not relationships:
+        for k, v in data.get("distances", {}).items():
+            if not isinstance(k, str) or "|" not in k:
+                continue
+            a_name, b_name = k.split("|", 1)
+            code_a = to_code(a_name)
+            code_b = to_code(b_name)
+            relationships[(code_a, code_b)] = relationship_from_entry(1.0 / (1.0 + float(v) / 8000.0))
+
+    return countries, relationships
 
 
 def write_csv(rows: List[dict], path: str):
@@ -371,8 +500,8 @@ def main():
         # Use different random seed for each run
         run_seed = args.randseed + (run_idx - 1) * 1000
         rnd = random.Random(run_seed)
-        countries, distances = load_seed(args.seed)
-        world = World(countries, distances, rnd)
+        countries, relationships = load_seed(args.seed)
+        world = World(countries, relationships, rnd)
 
         # Create numbered output directory
         if args.runs > 1:

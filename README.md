@@ -85,12 +85,19 @@ The seed file now is a JSON file with the following structure:
       "tax_rate": 0.25,
       "gov_spend_share": 0.22,
       "stability": 0.85,
+      "code": "CTA"
     }
   ],
-  "distances": {
-    "CountryA|CountryB": 5000.0,
-    "CountryA|CountryC": 8000.0
-  }
+  "relationships": [
+    {
+      "codes": ["CTA", "CTB"],
+      "trade_alignment": 0.8,
+      "financial_links": 0.6,
+      "security_partnership": 0.4,
+      "ideology_overlap": 0.7,
+      "supply_chain_overlap": 0.5
+    }
+  ]
 }
 ```
 
@@ -110,10 +117,11 @@ The seed file now is a JSON file with the following structure:
 - `tax_rate`: Tax revenue as share of GDP (e.g., 0.25 = 25%)
 - `gov_spend_share`: Government spending as share of GDP (e.g., 0.22 = 22%)
 - `stability`: Political/economic stability index from 0.0 to 1.0
+- `code`: Three-letter identifier used for cross-country references (e.g., ISO alpha-3)
 
-### Distance Data
+### Relationship Data
 
-The `distances` dictionary defines bilateral distances between countries in kilometers. Format: `"Country1|Country2": distance`. If not specified, default regional distances are used.
+The `relationships` list captures bilateral connectivity scores between countries. Each entry specifies a `codes` pair (e.g., `["USA", "CAN"]`) plus component scores for trade, financial links, security cooperation, ideological overlap, and supply-chain integration. The simulator aggregates these values into a single relationship strength (0 to 1). If no relationship is specified for a pair, a heuristic based on region, regime type, stability, and development levels is used.
 
 ## Output Files
 
@@ -224,6 +232,7 @@ cat > my_world.json << EOF
       "tax_rate": 0.28,
       "gov_spend_share": 0.26,
       "stability": 0.9,
+      "code": "RCT",
       "commodity_endowment": {"oil": -0.3, "metal": 0.1, "agri": 0.0}
     },
     {
@@ -241,12 +250,20 @@ cat > my_world.json << EOF
       "tax_rate": 0.20,
       "gov_spend_share": 0.18,
       "stability": 0.6,
+      "code": "EMG",
       "commodity_endowment": {"oil": 0.0, "metal": 0.4, "agri": 0.2}
     }
   ],
-  "distances": {
-    "Richland|Emerging": 8000.0
-  }
+  "relationships": [
+    {
+      "codes": ["RCT", "EMG"],
+      "trade_alignment": 0.62,
+      "financial_links": 0.35,
+      "security_partnership": 0.15,
+      "ideology_overlap": 0.25,
+      "supply_chain_overlap": 0.4
+    }
+  ]
 }
 EOF
 

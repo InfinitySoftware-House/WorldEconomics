@@ -15,7 +15,8 @@
       "tax_rate": 0.27,
       "gov_spend_share": 0.21,
       "stability": 0.82,
-      "party_leaning": 0.05
+      "party_leaning": 0.05,
+      "code": "USA"
     },
     {
       "name": "China",
@@ -32,7 +33,8 @@
       "tax_rate": 0.25,
       "gov_spend_share": 0.23,
       "stability": 0.75,
-      "party_leaning": 0.85
+      "party_leaning": 0.85,
+      "code": "CHN"
     },
     {
       "name": "Germany",
@@ -46,10 +48,11 @@
       "unemployment": 0.031,
       "debt_to_gdp": 0.66,
       "interest_rate": 0.04,
-      "tax_rate": 0.30,
+      "tax_rate": 0.3,
       "gov_spend_share": 0.24,
       "stability": 0.88,
-      "party_leaning": -0.15
+      "party_leaning": -0.15,
+      "code": "DEU"
     },
     {
       "name": "Japan",
@@ -65,8 +68,9 @@
       "interest_rate": 0.005,
       "tax_rate": 0.31,
       "gov_spend_share": 0.26,
-      "stability": 0.90,
-      "party_leaning": 0.25
+      "stability": 0.9,
+      "party_leaning": 0.25,
+      "code": "JPN"
     },
     {
       "name": "United Kingdom",
@@ -83,7 +87,8 @@
       "tax_rate": 0.33,
       "gov_spend_share": 0.27,
       "stability": 0.83,
-      "party_leaning": -0.05
+      "party_leaning": -0.05,
+      "code": "GBR"
     },
     {
       "name": "India",
@@ -100,7 +105,8 @@
       "tax_rate": 0.22,
       "gov_spend_share": 0.18,
       "stability": 0.68,
-      "party_leaning": 0.35
+      "party_leaning": 0.35,
+      "code": "IND"
     },
     {
       "name": "France",
@@ -117,7 +123,8 @@
       "tax_rate": 0.46,
       "gov_spend_share": 0.31,
       "stability": 0.79,
-      "party_leaning": -0.20
+      "party_leaning": -0.2,
+      "code": "FRA"
     },
     {
       "name": "Brazil",
@@ -134,7 +141,8 @@
       "tax_rate": 0.33,
       "gov_spend_share": 0.26,
       "stability": 0.64,
-      "party_leaning": 0.30
+      "party_leaning": 0.3,
+      "code": "BRA"
     },
     {
       "name": "Canada",
@@ -151,7 +159,8 @@
       "tax_rate": 0.33,
       "gov_spend_share": 0.25,
       "stability": 0.89,
-      "party_leaning": -0.10
+      "party_leaning": -0.1,
+      "code": "CAN"
     },
     {
       "name": "South Korea",
@@ -166,9 +175,10 @@
       "debt_to_gdp": 0.49,
       "interest_rate": 0.035,
       "tax_rate": 0.28,
-      "gov_spend_share": 0.20,
+      "gov_spend_share": 0.2,
       "stability": 0.81,
-      "party_leaning": -0.05
+      "party_leaning": -0.05,
+      "code": "KOR"
     },
     {
       "name": "Russia",
@@ -185,7 +195,8 @@
       "tax_rate": 0.29,
       "gov_spend_share": 0.34,
       "stability": 0.58,
-      "party_leaning": 0.75
+      "party_leaning": 0.75,
+      "code": "RUS"
     },
     {
       "name": "Australia",
@@ -199,10 +210,11 @@
       "unemployment": 0.038,
       "debt_to_gdp": 0.45,
       "interest_rate": 0.041,
-      "tax_rate": 0.30,
+      "tax_rate": 0.3,
       "gov_spend_share": 0.26,
       "stability": 0.91,
-      "party_leaning": 0.05
+      "party_leaning": 0.05,
+      "code": "AUS"
     },
     {
       "name": "Mexico",
@@ -211,15 +223,16 @@
       "gdp": 1414.0,
       "population": 128.0,
       "capital": 3800.0,
-      "tfp": 1.00,
+      "tfp": 1.0,
       "inflation": 0.048,
       "unemployment": 0.033,
       "debt_to_gdp": 0.58,
       "interest_rate": 0.112,
-      "tax_rate": 0.30,
+      "tax_rate": 0.3,
       "gov_spend_share": 0.24,
       "stability": 0.62,
-      "party_leaning": -0.15
+      "party_leaning": -0.15,
+      "code": "MEX"
     },
     {
       "name": "Saudi Arabia",
@@ -236,7 +249,8 @@
       "tax_rate": 0.15,
       "gov_spend_share": 0.37,
       "stability": 0.72,
-      "party_leaning": 0.65
+      "party_leaning": 0.65,
+      "code": "SAU"
     },
     {
       "name": "Nigeria",
@@ -252,39 +266,330 @@
       "interest_rate": 0.185,
       "tax_rate": 0.21,
       "gov_spend_share": 0.16,
-      "stability": 0.48,  
-      "party_leaning": 0.20
+      "stability": 0.48,
+      "party_leaning": 0.2,
+      "code": "NGA"
     }
   ],
-  "distances": {
-    "United States|Canada": 730,
-    "United States|Mexico": 2000,
-    "United States|United Kingdom": 5570,
-    "United States|China": 11140,
-    "United States|Japan": 10850,
-    "United States|Brazil": 7400,
-    "Canada|Mexico": 2710,
-    "Canada|United Kingdom": 5370,
-    "United Kingdom|Germany": 930,
-    "United Kingdom|France": 340,
-    "Germany|France": 630,
-    "Germany|Russia": 2100,
-    "France|Russia": 2500,
-    "China|Japan": 2100,
-    "China|South Korea": 950,
-    "China|India": 3800,
-    "China|Russia": 3640,
-    "Japan|South Korea": 1150,
-    "India|Saudi Arabia": 3150,
-    "Saudi Arabia|Nigeria": 4450,
-    "Australia|China": 9000,
-    "Australia|India": 7400,
-    "Australia|Japan": 7820,
-    "Brazil|Nigeria": 5900,
-    "Russia|Saudi Arabia": 3520,
-    "South Korea|Japan": 1030,
-    "Mexico|Brazil": 6600,
-    "Germany|Saudi Arabia": 4200,
-    "France|Nigeria": 4350
-  }
+  "relationships": [
+    {
+      "codes": [
+        "USA",
+        "CAN"
+      ],
+      "trade_alignment": 0.92,
+      "financial_links": 0.88,
+      "security_partnership": 0.95,
+      "ideology_overlap": 0.82,
+      "supply_chain_overlap": 0.9
+    },
+    {
+      "codes": [
+        "USA",
+        "MEX"
+      ],
+      "trade_alignment": 0.85,
+      "financial_links": 0.65,
+      "security_partnership": 0.55,
+      "ideology_overlap": 0.48,
+      "supply_chain_overlap": 0.82
+    },
+    {
+      "codes": [
+        "USA",
+        "GBR"
+      ],
+      "trade_alignment": 0.76,
+      "financial_links": 0.9,
+      "security_partnership": 0.92,
+      "ideology_overlap": 0.78,
+      "supply_chain_overlap": 0.66
+    },
+    {
+      "codes": [
+        "USA",
+        "CHN"
+      ],
+      "trade_alignment": 0.68,
+      "financial_links": 0.42,
+      "security_partnership": 0.1,
+      "ideology_overlap": 0.08,
+      "supply_chain_overlap": 0.57
+    },
+    {
+      "codes": [
+        "USA",
+        "JPN"
+      ],
+      "trade_alignment": 0.73,
+      "financial_links": 0.78,
+      "security_partnership": 0.87,
+      "ideology_overlap": 0.62,
+      "supply_chain_overlap": 0.71
+    },
+    {
+      "codes": [
+        "USA",
+        "BRA"
+      ],
+      "trade_alignment": 0.52,
+      "financial_links": 0.48,
+      "security_partnership": 0.22,
+      "ideology_overlap": 0.35,
+      "supply_chain_overlap": 0.4
+    },
+    {
+      "codes": [
+        "CAN",
+        "MEX"
+      ],
+      "trade_alignment": 0.74,
+      "financial_links": 0.58,
+      "security_partnership": 0.5,
+      "ideology_overlap": 0.52,
+      "supply_chain_overlap": 0.7
+    },
+    {
+      "codes": [
+        "CAN",
+        "GBR"
+      ],
+      "trade_alignment": 0.68,
+      "financial_links": 0.72,
+      "security_partnership": 0.78,
+      "ideology_overlap": 0.75,
+      "supply_chain_overlap": 0.55
+    },
+    {
+      "codes": [
+        "GBR",
+        "DEU"
+      ],
+      "trade_alignment": 0.81,
+      "financial_links": 0.74,
+      "security_partnership": 0.7,
+      "ideology_overlap": 0.68,
+      "supply_chain_overlap": 0.6
+    },
+    {
+      "codes": [
+        "GBR",
+        "FRA"
+      ],
+      "trade_alignment": 0.79,
+      "financial_links": 0.7,
+      "security_partnership": 0.65,
+      "ideology_overlap": 0.64,
+      "supply_chain_overlap": 0.58
+    },
+    {
+      "codes": [
+        "DEU",
+        "FRA"
+      ],
+      "trade_alignment": 0.83,
+      "financial_links": 0.76,
+      "security_partnership": 0.62,
+      "ideology_overlap": 0.66,
+      "supply_chain_overlap": 0.63
+    },
+    {
+      "codes": [
+        "DEU",
+        "RUS"
+      ],
+      "trade_alignment": 0.45,
+      "financial_links": 0.35,
+      "security_partnership": 0.15,
+      "ideology_overlap": 0.18,
+      "supply_chain_overlap": 0.3
+    },
+    {
+      "codes": [
+        "FRA",
+        "RUS"
+      ],
+      "trade_alignment": 0.42,
+      "financial_links": 0.33,
+      "security_partnership": 0.12,
+      "ideology_overlap": 0.2,
+      "supply_chain_overlap": 0.28
+    },
+    {
+      "codes": [
+        "CHN",
+        "JPN"
+      ],
+      "trade_alignment": 0.7,
+      "financial_links": 0.5,
+      "security_partnership": 0.18,
+      "ideology_overlap": 0.15,
+      "supply_chain_overlap": 0.62
+    },
+    {
+      "codes": [
+        "CHN",
+        "KOR"
+      ],
+      "trade_alignment": 0.76,
+      "financial_links": 0.55,
+      "security_partnership": 0.22,
+      "ideology_overlap": 0.22,
+      "supply_chain_overlap": 0.68
+    },
+    {
+      "codes": [
+        "CHN",
+        "IND"
+      ],
+      "trade_alignment": 0.58,
+      "financial_links": 0.38,
+      "security_partnership": 0.12,
+      "ideology_overlap": 0.25,
+      "supply_chain_overlap": 0.54
+    },
+    {
+      "codes": [
+        "CHN",
+        "RUS"
+      ],
+      "trade_alignment": 0.62,
+      "financial_links": 0.42,
+      "security_partnership": 0.28,
+      "ideology_overlap": 0.35,
+      "supply_chain_overlap": 0.48
+    },
+    {
+      "codes": [
+        "JPN",
+        "KOR"
+      ],
+      "trade_alignment": 0.82,
+      "financial_links": 0.68,
+      "security_partnership": 0.42,
+      "ideology_overlap": 0.52,
+      "supply_chain_overlap": 0.74
+    },
+    {
+      "codes": [
+        "IND",
+        "SAU"
+      ],
+      "trade_alignment": 0.67,
+      "financial_links": 0.46,
+      "security_partnership": 0.3,
+      "ideology_overlap": 0.22,
+      "supply_chain_overlap": 0.58
+    },
+    {
+      "codes": [
+        "SAU",
+        "NGA"
+      ],
+      "trade_alignment": 0.54,
+      "financial_links": 0.32,
+      "security_partnership": 0.26,
+      "ideology_overlap": 0.18,
+      "supply_chain_overlap": 0.4
+    },
+    {
+      "codes": [
+        "AUS",
+        "CHN"
+      ],
+      "trade_alignment": 0.74,
+      "financial_links": 0.48,
+      "security_partnership": 0.3,
+      "ideology_overlap": 0.28,
+      "supply_chain_overlap": 0.66
+    },
+    {
+      "codes": [
+        "AUS",
+        "IND"
+      ],
+      "trade_alignment": 0.71,
+      "financial_links": 0.52,
+      "security_partnership": 0.45,
+      "ideology_overlap": 0.42,
+      "supply_chain_overlap": 0.6
+    },
+    {
+      "codes": [
+        "AUS",
+        "JPN"
+      ],
+      "trade_alignment": 0.75,
+      "financial_links": 0.58,
+      "security_partnership": 0.6,
+      "ideology_overlap": 0.55,
+      "supply_chain_overlap": 0.7
+    },
+    {
+      "codes": [
+        "BRA",
+        "NGA"
+      ],
+      "trade_alignment": 0.5,
+      "financial_links": 0.28,
+      "security_partnership": 0.18,
+      "ideology_overlap": 0.32,
+      "supply_chain_overlap": 0.36
+    },
+    {
+      "codes": [
+        "RUS",
+        "SAU"
+      ],
+      "trade_alignment": 0.6,
+      "financial_links": 0.34,
+      "security_partnership": 0.25,
+      "ideology_overlap": 0.22,
+      "supply_chain_overlap": 0.33
+    },
+    {
+      "codes": [
+        "KOR",
+        "JPN"
+      ],
+      "trade_alignment": 0.82,
+      "financial_links": 0.68,
+      "security_partnership": 0.42,
+      "ideology_overlap": 0.52,
+      "supply_chain_overlap": 0.74
+    },
+    {
+      "codes": [
+        "MEX",
+        "BRA"
+      ],
+      "trade_alignment": 0.55,
+      "financial_links": 0.35,
+      "security_partnership": 0.2,
+      "ideology_overlap": 0.37,
+      "supply_chain_overlap": 0.42
+    },
+    {
+      "codes": [
+        "DEU",
+        "SAU"
+      ],
+      "trade_alignment": 0.6,
+      "financial_links": 0.45,
+      "security_partnership": 0.24,
+      "ideology_overlap": 0.3,
+      "supply_chain_overlap": 0.4
+    },
+    {
+      "codes": [
+        "FRA",
+        "NGA"
+      ],
+      "trade_alignment": 0.53,
+      "financial_links": 0.32,
+      "security_partnership": 0.22,
+      "ideology_overlap": 0.28,
+      "supply_chain_overlap": 0.38
+    }
+  ]
 }
