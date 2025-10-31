@@ -160,6 +160,10 @@ Multi-panel visualization showing time series for all countries:
 - Stability index
 - Current Account (billions)
 
+Example output:
+
+![World Overview](test_run/world_overview.png)
+
 ## Model Features
 
 ### Economic Dynamics
