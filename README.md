@@ -218,7 +218,6 @@ These can be modified in the script for alternative scenarios.
 
 ```bash
 # Create a seed file with your countries
-cat > my_world.json << EOF
 {
   "countries": [
     {
@@ -269,7 +268,6 @@ cat > my_world.json << EOF
     }
   ]
 }
-EOF
 
 # Run simulation
 python world_economics.py --seed my_world.json --years 40 --out my_results
